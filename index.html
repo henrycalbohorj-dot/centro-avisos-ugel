@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Centro de avisos · UGEL Chincha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#030a12;--panel:rgba(6,20,32,.78);--line:rgba(46,197,255,.22);--ink:#e6f6ff;--mut:#8fb0c4;--neon:#2EC5FF;--ok:#7dffc0;--aviso:#F2B300;--urg:#ff5c7a;--vio:#A066FF;
+  --f-num:'Rajdhani',system-ui,sans-serif;--f-txt:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--f-txt);overflow:hidden}
+body{background:radial-gradient(120% 80% at 50% 110%,rgba(122,60,255,.22),transparent 60%),radial-gradient(90% 60% at 50% -10%,rgba(46,197,255,.18),transparent 60%),var(--bg)}
+body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(46,197,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(46,197,255,.06) 1px,transparent 1px);background-size:48px 48px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 50%,#000 30%,transparent 80%);mask-image:radial-gradient(ellipse at 50% 50%,#000 30%,transparent 80%)}
+.app{position:relative;height:100%;display:grid;grid-template-rows:auto 1fr auto;gap:clamp(12px,1.6vw,28px);padding:clamp(14px,2vw,40px)}
+.caja{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+header{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.marca small{display:block;font:600 clamp(11px,.85vw,16px) var(--f-num);letter-spacing:.2em;color:var(--mut)}
+.marca b{font:700 clamp(24px,2.6vw,52px)/1 var(--f-num);letter-spacing:.08em;color:var(--neon);text-shadow:0 0 18px rgba(46,197,255,.6)}
+.hora{text-align:right}.hora b{display:block;font:700 clamp(30px,3.4vw,68px)/1 var(--f-num)}.hora span{font:500 clamp(12px,.95vw,18px) var(--f-num);color:var(--mut)}
+main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(12px,1.6vw,28px);min-height:0}
+.kpis{display:grid;grid-template-rows:repeat(3,1fr);gap:clamp(12px,1.6vw,28px)}
+.kpi{display:flex;flex-direction:column;justify-content:center;padding:clamp(14px,1.6vw,30px);border-left:4px solid var(--c)}
+.kpi span{font:700 clamp(12px,1vw,18px) var(--f-num);letter-spacing:.18em;color:var(--mut);text-transform:uppercase}
+.kpi b{font:700 clamp(46px,6vw,120px)/1 var(--f-num);color:var(--c);text-shadow:0 0 24px color-mix(in srgb,var(--c) 55%,transparent)}
+.kpi em{font-style:normal;font-size:clamp(12px,1vw,18px);color:var(--mut)}
+.feed{display:flex;flex-direction:column;min-height:0;padding:clamp(14px,1.4vw,26px)}
+.feed h2{margin:0 0 12px;font:700 clamp(14px,1.1vw,20px) var(--f-num);letter-spacing:.2em;color:var(--mut);display:flex;justify-content:space-between}
+.feed h2 i{font-style:normal;color:var(--ok)}
+.lista{flex:1;overflow:hidden;display:flex;flex-direction:column;gap:10px}
+.ev{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:12px 16px;background:rgba(2,10,18,.55);border-left:3px solid var(--c);animation:entra .6s ease-out}
+.ev .ico{width:clamp(36px,2.8vw,54px);height:clamp(36px,2.8vw,54px);display:grid;place-items:center;font-size:clamp(18px,1.6vw,30px);background:color-mix(in srgb,var(--c) 18%,transparent);border:1px solid color-mix(in srgb,var(--c) 50%,transparent)}
+.ev b{display:block;font:700 clamp(16px,1.35vw,28px)/1.2 var(--f-num);letter-spacing:.02em}
+.ev p{margin:2px 0 0;font-size:clamp(13px,1vw,19px);color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev time{font:600 clamp(13px,1vw,19px) var(--f-num);color:var(--mut)}
+.ev.nuevo{box-shadow:0 0 0 1px var(--c),0 0 26px color-mix(in srgb,var(--c) 40%,transparent)}
+@keyframes entra{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
+footer{display:flex;align-items:center;gap:16px;padding:10px 18px;font:600 clamp(12px,.95vw,18px) var(--f-num);color:var(--mut)}
+footer .p{display:inline-flex;align-items:center;gap:6px}footer .p::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--s,#555);box-shadow:0 0 8px var(--s,#555)}
+footer button{margin-left:auto;font:700 clamp(12px,.95vw,18px) var(--f-num);letter-spacing:.08em;color:#021019;background:var(--neon);border:0;padding:8px 16px;cursor:pointer}
+footer button.off{background:transparent;color:var(--mut);border:1px solid var(--line)}
+.banner{position:fixed;left:50%;top:50%;translate:-50% -50%;width:min(1100px,86vw);padding:clamp(20px,2.6vw,48px);z-index:5;border-left:6px solid var(--c);opacity:0;pointer-events:none;transition:opacity .5s,scale .5s;scale:.96}
+.banner.ver{opacity:1;scale:1}
+.banner small{font:700 clamp(14px,1.2vw,24px) var(--f-num);letter-spacing:.24em;color:var(--c)}
+.banner b{display:block;margin:10px 0;font:700 clamp(30px,3.6vw,72px)/1.1 var(--f-num)}
+.banner p{margin:0;font-size:clamp(17px,1.6vw,32px);color:var(--mut)}
+@media (max-width:800px){main{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr);grid-template-rows:none}.kpi b{font-size:40px}}
+@media (prefers-reduced-motion:reduce){.ev{animation:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="marca"><small>UGEL CHINCHA · ÁREA DE INFORMÁTICA</small><b>CENTRO DE AVISOS</b></div>
+    <div class="hora"><b id="hora">--:--</b><span id="fecha"></span></div>
+  </header>
+  <main>
+    <section class="kpis">
+      <div class="kpi caja" style="--c:var(--aviso)"><span>Tickets pendientes</span><b id="kT">--</b><em>Soporte T.I.</em></div>
+      <div class="kpi caja" style="--c:var(--vio)"><span>Créditos por evaluar</span><b id="kC">--</b><em>Calculadora de préstamos</em></div>
+      <div class="kpi caja" style="--c:var(--ok)"><span>Equipos en línea</span><b id="kR">--</b><em id="kRa">IP Libres</em></div>
+    </section>
+    <section class="feed caja"><h2>ÚLTIMOS AVISOS <i id="vivo">● EN VIVO</i></h2><div class="lista" id="lista"></div></section>
+  </main>
+  <footer class="caja"><span class="p" id="sT">Tickets</span><span class="p" id="sC">Créditos</span><span class="p" id="sR">Red</span><span id="hor"></span>
+    <button id="bVoz" class="off">🔈 ACTIVAR VOZ</button></footer>
+</div>
+<div class="banner caja" id="banner"><small id="bApp"></small><b id="bTit"></b><p id="bDet"></p></div>
+<script>
+const $ = s => document.querySelector(s), esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const APP = { tickets: ['🎫', 'TICKETS · SOPORTE T.I.'], creditos: ['💳', 'CRÉDITOS'], red: ['📡', 'RED · IP LIBRES'], sistema: ['🤖', 'SISTEMA'] };
+const COL = { urgente: 'var(--urg)', aviso: 'var(--aviso)', info: 'var(--neon)' };
+let voz = false; try { voz = localStorage.getItem('voz') === '1'; } catch {}
+const hora = ts => new Date(ts).toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', hour12: false });
+function reloj() { const d = new Date(), f = d.toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long' });
+  $('#hora').textContent = hora(d); $('#fecha').textContent = f[0].toUpperCase() + f.slice(1); }
+setInterval(reloj, 10000); reloj();
+function tarjeta(e, nuevo) {
+  const [ico, nom] = APP[e.app] || APP.sistema, el = document.createElement('div');
+  el.className = 'ev caja' + (nuevo ? ' nuevo' : ''); el.style.setProperty('--c', COL[e.nivel] || COL.info);
+  el.innerHTML = `<span class="ico">${ico}</span><span><b>${esc(e.titulo)}</b><p>${esc(nom)}${e.detalle ? ' · ' + esc(e.detalle) : ''}</p></span><time>${hora(e.ts)}</time>`;
+  const L = $('#lista'); L.prepend(el); while (L.children.length > 12) L.lastChild.remove();
+  if (nuevo) setTimeout(() => el.classList.remove('nuevo'), 20000);
+}
+// Voz del navegador (mientras Silvanas no esté migrada): cola para no encimar avisos
+const cola = []; let hablando = false;
+function hablar(t) { if (!voz || !t || !('speechSynthesis' in window)) return; cola.push(t); siguiente(); }
+function siguiente() {
+  if (hablando || !cola.length) return; hablando = true;
+  const u = new SpeechSynthesisUtterance(cola.shift()), vs = speechSynthesis.getVoices();
+  u.voice = vs.find(v => /es-(PE|419|MX|US)/i.test(v.lang)) || vs.find(v => /^es/i.test(v.lang)) || null; u.lang = (u.voice && u.voice.lang) || 'es-ES'; u.rate = 1;
+  u.onend = u.onerror = () => { hablando = false; setTimeout(siguiente, 700); }; speechSynthesis.speak(u);
+}
+function campana() { try { const a = new AudioContext(), o = a.createOscillator(), g = a.createGain(); o.connect(g); g.connect(a.destination);
+  o.frequency.setValueAtTime(880, a.currentTime); o.frequency.setValueAtTime(1320, a.currentTime + .12); g.gain.setValueAtTime(.18, a.currentTime); g.gain.exponentialRampToValueAtTime(.001, a.currentTime + .6); o.start(); o.stop(a.currentTime + .6); } catch {} }
+let tBanner;
+function banner(e) {
+  const [, nom] = APP[e.app] || APP.sistema; $('#banner').style.setProperty('--c', COL[e.nivel] || COL.info);
+  $('#bApp').textContent = nom; $('#bTit').textContent = e.titulo; $('#bDet').textContent = e.detalle || '';
+  $('#banner').classList.add('ver'); clearTimeout(tBanner); tBanner = setTimeout(() => $('#banner').classList.remove('ver'), 9000);
+}
+function pintarVoz() { const b = $('#bVoz'); b.textContent = voz ? '🔊 VOZ ACTIVA' : '🔈 ACTIVAR VOZ'; b.classList.toggle('off', !voz); }
+$('#bVoz').onclick = () => { voz = !voz; try { localStorage.setItem('voz', voz ? '1' : '0'); } catch {} pintarVoz(); if (voz) hablar('Voz activada.'); }; pintarVoz();
+async function resumen() {
+  try {
+    const r = await (await fetch('/api/resumen')).json();
+    $('#kT').textContent = r.ticketsPendientes ?? '--'; $('#kC').textContent = r.creditosPendientes ?? '--';
+    $('#kR').textContent = r.red ? r.red.enLinea : '--'; $('#kRa').textContent = r.red && r.red.alertas ? `IP Libres · ${r.red.alertas} alertas` : 'IP Libres · sin alertas';
+    for (const [id, k] of [['#sT', 'tickets'], ['#sC', 'creditos'], ['#sR', 'red']]) $(id).style.setProperty('--s', !r.salud[k] ? '#555' : r.salud[k].error ? 'var(--urg)' : 'var(--ok)');
+    $('#hor').textContent = r.enHorario ? '' : 'Fuera de horario: avisos sin voz';
+  } catch {}
+}
+setInterval(resumen, 15000);
+(async () => {
+  let ult = 0;
+  try { const L = await (await fetch('/api/eventos?n=12')).json(); L.forEach(e => tarjeta(e, false)); ult = L.length ? L[L.length - 1].id : 0; } catch {}
+  resumen();
+  const es = new EventSource('/api/stream?desde=' + ult);
+  es.addEventListener('aviso', m => { const e = JSON.parse(m.data); tarjeta(e, true); banner(e); if (e.nivel !== 'info') campana(); hablar(e.voz); setTimeout(resumen, 1500); });
+  es.onopen = () => $('#vivo').style.color = 'var(--ok)'; es.onerror = () => $('#vivo').style.color = 'var(--urg)';
+})();
+</script>
+</body>
+</html>

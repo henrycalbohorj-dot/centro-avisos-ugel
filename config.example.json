@@ -1,0 +1,7 @@
+{
+  "puerto": 8095,
+  "ipLibres": "http://127.0.0.1:8090",
+  "sinAtenderMin": [15, 30, 60],
+  "horario": { "dias": [1, 2, 3, 4, 5], "desde": "08:00", "hasta": "17:30" },
+  "voz": { "ticketNuevo": true, "sinAtender": true, "asignado": false, "cerrado": false, "creditoNuevo": true, "creditoEvaluado": false, "red": true }
+}

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Silvanas · UGEL Chincha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rgb:79,209,255;--bg:#030a12;--panel:rgba(5,16,27,.74);--line:rgba(46,197,255,.24);--ink:#e9f7ff;--mut:#93b3c7;--neon:#2EC5FF;--ok:#7dffc0;--aviso:#F2B300;--urg:#ff5c7a;--vio:#A066FF;
+  --f-num:'Rajdhani',system-ui,sans-serif;--f-txt:'Inter',system-ui,sans-serif;--m:clamp(16px,2.2vw,44px)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--f-txt);overflow:hidden;cursor:none}
+#mapa{position:fixed;inset:0;width:100%;height:100%;border:0;pointer-events:none}
+.velo{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(3,10,18,.55),transparent 22%,transparent 70%,rgba(3,10,18,.75))}
+.caja{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+.marca{position:fixed;left:var(--m);top:var(--m);padding:12px 20px 12px 16px;border-left:3px solid var(--neon)}
+.marca small{display:block;font:600 clamp(11px,.8vw,15px) var(--f-num);letter-spacing:.2em;color:var(--mut)}
+.marca b{display:block;font:700 clamp(20px,2vw,40px)/1.05 var(--f-num);letter-spacing:.08em;color:var(--neon);text-shadow:0 0 16px rgba(46,197,255,.6);margin:3px 0 4px}
+.marca span{font:700 clamp(28px,3.2vw,64px)/1 var(--f-num)}.marca em{display:block;font:500 clamp(12px,.9vw,17px) var(--f-num);font-style:normal;color:var(--mut);margin-top:3px}
+.kpis{position:fixed;right:var(--m);top:var(--m);display:flex;gap:clamp(14px,1.8vw,36px);padding:14px 22px}
+.kpis div{text-align:center}.kpis b{display:block;font:700 clamp(26px,2.8vw,56px)/1 var(--f-num);color:var(--c);text-shadow:0 0 14px color-mix(in srgb,var(--c) 55%,transparent)}
+.kpis span{font:600 clamp(10px,.8vw,15px) var(--f-num);letter-spacing:.1em;color:var(--mut);text-transform:uppercase}
+/* Pendientes: solo aparece si hay algo por atender */
+.pend{position:fixed;right:var(--m);top:calc(var(--m) + clamp(90px,7.5vw,140px));width:min(460px,30vw);padding:16px 18px;transition:opacity .8s,translate .8s}
+.pend.oculto{opacity:0;translate:40px 0}
+.pend h3{margin:0 0 10px;font:700 clamp(13px,1vw,19px) var(--f-num);letter-spacing:.2em;color:var(--aviso)}
+.pend li{list-style:none;display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 0;border-top:1px solid var(--line)}
+.pend li b{font:700 clamp(15px,1.15vw,22px) var(--f-num)}.pend li time{font:600 clamp(13px,1vw,19px) var(--f-num);color:var(--c,var(--mut))}
+.pend li p{grid-column:1/-1;margin:0;font-size:clamp(12px,.9vw,17px);color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pend ul{margin:0;padding:0}.pend .cred{margin-top:10px;font:700 clamp(14px,1.05vw,20px) var(--f-num);color:var(--vio)}
+/* Silvanas */
+.silv{position:fixed;left:calc(var(--m) - 10px);bottom:calc(var(--m) - 14px);display:flex;align-items:center;gap:clamp(6px,1vw,20px);max-width:min(1250px,78vw)}
+#cara{flex:none;width:clamp(170px,16.5vw,330px);aspect-ratio:1;filter:drop-shadow(0 0 18px rgba(var(--rgb),.35));transition:filter .6s}
+.silv.hablando #cara{filter:drop-shadow(0 0 34px rgba(var(--rgb),.6))}
+.ident{display:flex;align-items:baseline;gap:14px;margin:0 0 8px 4px}
+.nombre{font:700 clamp(15px,1.2vw,24px) var(--f-num);letter-spacing:.34em;color:rgb(var(--rgb));text-shadow:0 0 14px rgba(var(--rgb),.6);transition:color .6s}
+.estado{font:600 clamp(11px,.85vw,16px) var(--f-num);letter-spacing:.16em;color:var(--mut);text-transform:uppercase}
+.sub{padding:14px 22px 16px;border-left:3px solid var(--c,var(--neon));opacity:0;translate:0 14px;transition:opacity .6s,translate .6s}
+.silv.ver .sub{opacity:1;translate:0 0}
+.sub small{display:block;font:700 clamp(11px,.85vw,16px) var(--f-num);letter-spacing:.22em;color:var(--c,var(--neon));margin-bottom:6px}
+.sub p{margin:0;font:600 clamp(17px,1.55vw,32px)/1.35 var(--f-txt)}
+.sub p span{color:var(--mut)}
+/* Aviso grande */
+.banner{position:fixed;left:50%;top:44%;translate:-50% -50%;width:min(1150px,84vw);padding:clamp(20px,2.4vw,46px);border-left:6px solid var(--c);opacity:0;scale:.96;transition:opacity .5s,scale .5s;z-index:3}
+.banner.ver{opacity:1;scale:1}
+.banner small{font:700 clamp(14px,1.15vw,24px) var(--f-num);letter-spacing:.24em;color:var(--c)}
+.banner b{display:block;margin:10px 0;font:700 clamp(30px,3.4vw,70px)/1.1 var(--f-num)}
+.banner p{margin:0;font-size:clamp(17px,1.5vw,30px);color:var(--mut)}
+.toque{position:fixed;left:50%;bottom:10px;translate:-50% 0;font:600 14px var(--f-num);color:var(--mut);letter-spacing:.1em;opacity:.8}
+.toque[hidden]{display:none}
+.toque.bloqueo{bottom:auto;top:50%;translate:-50% -50%;z-index:6;padding:22px 34px;font:700 clamp(18px,1.6vw,30px) var(--f-num);letter-spacing:.06em;color:#021019;opacity:1;
+  background:linear-gradient(90deg,#7fe6ff,#2EC5FF);box-shadow:0 0 40px rgba(46,197,255,.7);animation:llama 1.4s ease-in-out infinite;cursor:pointer}
+@keyframes llama{50%{box-shadow:0 0 10px rgba(46,197,255,.3)}}
+body:has(.toque.bloqueo){cursor:auto}
+.voz{position:fixed;right:var(--m);bottom:10px;font:500 12px var(--f-num);color:var(--mut);opacity:.6}
+</style>
+</head>
+<body>
+<iframe id="mapa" title="Mapa 3D de la red" allow="autoplay"></iframe>
+<div class="velo"></div>
+<div class="marca caja"><small>UGEL CHINCHA · ÁREA DE INFORMÁTICA</small><b>CENTRO DE CONTROL</b><span id="hora">--:--</span><em id="fecha"></em></div>
+<div class="kpis caja">
+  <div style="--c:var(--aviso)"><b id="kT">--</b><span>Tickets</span></div>
+  <div style="--c:var(--vio)"><b id="kC">--</b><span>Créditos</span></div>
+  <div style="--c:var(--ok)"><b id="kR">--</b><span>En línea</span></div>
+</div>
+<div class="pend caja oculto" id="pend"><h3>POR ATENDER</h3><ul id="pLista"></ul><div class="cred" id="pCred"></div></div>
+<div class="banner caja" id="banner"><small id="bApp"></small><b id="bTit"></b><p id="bDet"></p></div>
+<div class="silv" id="silv">
+  <canvas id="cara" aria-label="Silvanas"></canvas>
+  <div><div class="ident"><span class="nombre">SILVANAS</span><span class="estado" id="estado">En línea</span></div><div class="sub caja" id="sub"><small id="sCat">DATO TECH</small><p id="sTxt"></p></div></div>
+</div>
+<div class="toque" id="toque">Toca la pantalla una vez para activar la voz de Silvanas</div>
+<div class="voz" id="voz"></div>
+<script>
+const $ = s => document.querySelector(s), esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const APP = { tickets: 'TICKETS · SOPORTE T.I.', creditos: 'CRÉDITOS', red: 'RED · IP LIBRES', sistema: 'SISTEMA' };
+const COL = { urgente: 'var(--urg)', aviso: 'var(--aviso)', info: 'var(--neon)' };
+let RES = null;
+function reloj() { const d = new Date(), f = d.toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long' });
+  $('#hora').textContent = d.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', hour12: false }); $('#fecha').textContent = f[0].toUpperCase() + f.slice(1); }
+setInterval(reloj, 10000); reloj();
+
+/* ---------- Cara de Silvanas: su núcleo de luz, reaccionando al audio real de su voz ---------- */
+const cv = $('#cara'), g2 = cv.getContext('2d');
+const COLS = { reposo: [79, 209, 255], hablando: [124, 255, 138], aviso: [255, 207, 79], urgente: [255, 111, 111] };
+let estadoCara = 'reposo', col = COLS.reposo.slice(), AN = null, FREQ = null, pulso = 0, fase = 0, ang = 0, ang2 = 0;
+const N = 64, BAR = new Float32Array(N);
+function ponerEstado(e, txt) { estadoCara = e; $('#estado').textContent = txt; }
+function dibujar() {
+  requestAnimationFrame(dibujar);
+  const s = cv.clientWidth, d = Math.min(devicePixelRatio || 1, 2);
+  if (cv.width !== Math.round(s * d)) { cv.width = cv.height = Math.round(s * d); }
+  g2.setTransform(d, 0, 0, d, 0, 0); g2.clearRect(0, 0, s, s);
+  const c = s / 2, k = s / 260;
+  const obj = COLS[estadoCara] || COLS.reposo; for (let i = 0; i < 3; i++) col[i] += (obj[i] - col[i]) * 0.05;
+  const [r, g, b] = col.map(Math.round), rgba = a => `rgba(${r},${g},${b},${a})`;
+  document.documentElement.style.setProperty('--rgb', `${r},${g},${b}`);
+  // Niveles: audio real si está sonando su voz; si no, respiración suave
+  const sonando = AN && audio && !audio.paused;
+  if (sonando) AN.getByteFrequencyData(FREQ);
+  fase += hablando ? 0.22 : 0.025; pulso *= 0.9;
+  let nivel = 0;
+  for (let i = 0; i < N; i++) {
+    const m = i < N / 2 ? i : N - 1 - i; // simétrico, como un rostro
+    let v;
+    if (sonando) v = Math.pow(FREQ[2 + Math.floor(m * 1.25)] / 255, 1.25) * 1.1; // rango de la voz humana (~100 Hz a 4 kHz)
+    else if (hablando) v = 0.22 + pulso * 0.55 + Math.abs(Math.sin(fase + m * 0.55)) * 0.28;
+    else v = 0.08 + Math.sin(fase + m * 0.45) * 0.05 + 0.05;
+    BAR[i] += (Math.min(1, v) - BAR[i]) * (sonando ? 0.45 : 0.18); nivel += BAR[i];
+  }
+  nivel /= N; ang += 0.004 + nivel * 0.014; ang2 -= 0.006 + nivel * 0.01;
+  // Halo
+  const halo = g2.createRadialGradient(c, c, 30 * k, c, c, 128 * k);
+  halo.addColorStop(0, rgba(0.16 + nivel * 0.3)); halo.addColorStop(1, rgba(0));
+  g2.fillStyle = halo; g2.beginPath(); g2.arc(c, c, 128 * k, 0, 7); g2.fill();
+  g2.save(); g2.translate(c, c);
+  // Marcas de escala exteriores
+  for (let i = 0; i < 90; i++) { const a = i / 90 * Math.PI * 2 + ang * 0.3, l = i % 5 ? 3 : 7;
+    g2.strokeStyle = rgba(i % 5 ? 0.22 : 0.45); g2.lineWidth = 1; g2.beginPath();
+    g2.moveTo(Math.cos(a) * 118 * k, Math.sin(a) * 118 * k); g2.lineTo(Math.cos(a) * (118 - l) * k, Math.sin(a) * (118 - l) * k); g2.stroke(); }
+  // Anillo punteado que gira (el de su app original)
+  g2.save(); g2.rotate(ang); g2.strokeStyle = rgba(0.35); g2.lineWidth = 1.6 * k; g2.setLineDash([2 * k, 10 * k]);
+  g2.beginPath(); g2.arc(0, 0, 106 * k, 0, 7); g2.stroke(); g2.restore();
+  // Arcos segmentados en sentido contrario
+  g2.save(); g2.rotate(ang2); g2.lineWidth = 3 * k; g2.lineCap = 'round';
+  for (let j = 0; j < 3; j++) { g2.strokeStyle = rgba(0.55); g2.beginPath(); g2.arc(0, 0, 97 * k, j * 2.094, j * 2.094 + 0.9); g2.stroke(); }
+  g2.restore();
+  // Barras radiales tipo ecualizador
+  g2.shadowColor = rgba(0.9); g2.shadowBlur = 10 * k; g2.lineCap = 'round';
+  for (let i = 0; i < N; i++) {
+    const a = i / N * Math.PI * 2 - Math.PI / 2, m = 5 * k + BAR[i] * 38 * k, r0 = 60 * k;
+    g2.strokeStyle = rgba(0.35 + BAR[i] * 0.6); g2.lineWidth = 2.6 * k; g2.beginPath();
+    g2.moveTo(Math.cos(a) * r0, Math.sin(a) * r0); g2.lineTo(Math.cos(a) * (r0 + m), Math.sin(a) * (r0 + m)); g2.stroke();
+  }
+  g2.shadowBlur = 0;
+  // Partículas que orbitan
+  for (let j = 0; j < 3; j++) { const a = ang * 3 + j * 2.094; g2.fillStyle = rgba(0.95);
+    g2.beginPath(); g2.arc(Math.cos(a) * 86 * k, Math.sin(a) * 86 * k, 2.4 * k, 0, 7); g2.fill(); }
+  // Núcleo
+  const nr = (42 + nivel * 16) * k, ng = g2.createRadialGradient(0, 0, 0, 0, 0, nr);
+  ng.addColorStop(0, rgba(0.95)); ng.addColorStop(0.55, rgba(0.38)); ng.addColorStop(1, rgba(0));
+  g2.fillStyle = ng; g2.beginPath(); g2.arc(0, 0, nr, 0, 7); g2.fill();
+  const nc = (20 + nivel * 8) * k, nb = g2.createRadialGradient(-nc * 0.3, -nc * 0.35, 1, 0, 0, nc);
+  nb.addColorStop(0, 'rgba(255,255,255,.95)'); nb.addColorStop(0.35, rgba(1)); nb.addColorStop(1, rgba(0.85));
+  g2.fillStyle = nb; g2.shadowColor = rgba(1); g2.shadowBlur = 24 * k; g2.beginPath(); g2.arc(0, 0, nc, 0, 7); g2.fill(); g2.shadowBlur = 0;
+  g2.strokeStyle = rgba(0.5); g2.lineWidth = 1; g2.beginPath(); g2.arc(0, 0, nc + 6 * k + Math.sin(fase * 2) * 2 * k, 0, 7); g2.stroke();
+  g2.restore();
+}
+requestAnimationFrame(dibujar);
+
+/* ---------- Voz humana: audio del servidor (Camila, Perú); si falla, la voz del navegador ---------- */
+const audio = new Audio(); audio.preload = 'auto'; audio.crossOrigin = 'anonymous';
+let ACX = null;
+function conectarAudio() {
+  if (ACX) { if (ACX.state === 'suspended') ACX.resume(); return; }
+  try { ACX = new AudioContext(); const src = ACX.createMediaElementSource(audio); AN = ACX.createAnalyser(); AN.fftSize = 512; AN.smoothingTimeConstant = 0.6;
+    FREQ = new Uint8Array(AN.frequencyBinCount); src.connect(AN); AN.connect(ACX.destination); } catch {}
+}
+let VOZN = null;
+function elegirVoz() { const vs = speechSynthesis.getVoices().filter(v => /^es/i.test(v.lang)); if (!vs.length) return;
+  const n = v => (/natural|neural|online/i.test(v.name) ? 20 : 0) + (/es-PE/i.test(v.lang) ? 8 : /es-(419|MX|US)/i.test(v.lang) ? 4 : 0); VOZN = vs.sort((a, b) => n(b) - n(a))[0]; }
+if ('speechSynthesis' in window) { elegirVoz(); speechSynthesis.onvoiceschanged = elegirVoz; }
+const cola = []; let hablando = false, tSub;
+function decir(texto, cat, color, nivel) { if (!texto) return; cola.push({ texto, cat, color, nivel }); siguiente(); }
+function subtitulo(texto, frac) { const i = Math.round(texto.length * frac), j = texto.indexOf(' ', i); const corte = j < 0 ? texto.length : j;
+  $('#sTxt').innerHTML = esc(texto.slice(0, corte)) + '<span>' + esc(texto.slice(corte)) + '</span>'; }
+function siguiente() {
+  if (hablando || !cola.length) return;
+  const { texto, cat, color, nivel } = cola.shift(); hablando = true;
+  const silv = $('#silv'); $('#sCat').textContent = cat; $('#sub').style.setProperty('--c', color || 'var(--neon)');
+  $('#sTxt').innerHTML = '<span>' + esc(texto) + '</span>'; silv.classList.add('ver', 'hablando'); clearTimeout(tSub);
+  ponerEstado(nivel === 'urgente' ? 'urgente' : nivel === 'aviso' ? 'aviso' : 'hablando', 'Hablando');
+  let listo = false;
+  const fin = () => { if (listo) return; listo = true; hablando = false; silv.classList.remove('hablando'); $('#sTxt').textContent = texto; ponerEstado('reposo', 'En línea');
+    tSub = setTimeout(() => silv.classList.remove('ver'), 7000); setTimeout(siguiente, 900); };
+  const navegador = () => { // respaldo: voz del navegador
+    if (!('speechSynthesis' in window)) { setTimeout(fin, 5000); return; }
+    const u = new SpeechSynthesisUtterance(texto); if (VOZN) { u.voice = VOZN; u.lang = VOZN.lang; } else u.lang = 'es-PE';
+    u.onboundary = e => { pulso = 1; if (e.charIndex != null) subtitulo(texto, e.charIndex / texto.length); };
+    u.onstart = () => { $('#toque').hidden = true; }; u.onend = u.onerror = fin; speechSynthesis.speak(u);
+    setTimeout(() => { if (!listo && !speechSynthesis.speaking) fin(); }, 5000 + texto.length * 110);
+  };
+  conectarAudio();
+  audio.onplaying = () => { $('#toque').hidden = true; };
+  audio.ontimeupdate = () => { if (audio.duration) subtitulo(texto, audio.currentTime / audio.duration); };
+  audio.onended = fin;
+  audio.onerror = () => { if (!listo) navegador(); };
+  audio.src = '/api/voz?t=' + encodeURIComponent(texto);
+  audio.play().catch(err => {
+    audio.onerror = null; audio.removeAttribute('src');
+    if (err && err.name === 'NotAllowedError') { // el navegador bloquea el sonido hasta el primer clic: guardar el mensaje
+      listo = true; hablando = false; cola.unshift({ texto, cat, color, nivel }); bloqueado = true;
+      silv.classList.remove('hablando'); ponerEstado('reposo', 'Voz en pausa');
+      const t = $('#toque'); t.hidden = false; t.classList.add('bloqueo'); t.textContent = '🔊 Haz clic aquí para escuchar a Silvanas';
+      return;
+    }
+    if (!listo) navegador();
+  });
+}
+let bloqueado = false;
+function activarVoz() {
+  const t = $('#toque'); t.hidden = true; t.classList.remove('bloqueo'); conectarAudio();
+  if (bloqueado) { bloqueado = false; siguiente(); }
+}
+addEventListener('pointerdown', activarVoz); addEventListener('keydown', activarVoz);
+
+/* ---------- Avisos ---------- */
+let tBan;
+function banner(e) {
+  const b = $('#banner'); b.style.setProperty('--c', COL[e.nivel] || COL.info);
+  $('#bApp').textContent = APP[e.app] || APP.sistema; $('#bTit').textContent = e.titulo; $('#bDet').textContent = e.detalle || '';
+  b.classList.add('ver'); clearTimeout(tBan); tBan = setTimeout(() => b.classList.remove('ver'), 10000);
+}
+function campana() { try { const a = new AudioContext(), o = a.createOscillator(), g = a.createGain(); o.connect(g); g.connect(a.destination);
+  o.frequency.setValueAtTime(880, a.currentTime); o.frequency.setValueAtTime(1320, a.currentTime + .12); g.gain.setValueAtTime(.16, a.currentTime); g.gain.exponentialRampToValueAtTime(.001, a.currentTime + .6); o.start(); o.stop(a.currentTime + .6); } catch {} }
+function aviso(e) {
+  if (e.nivel === 'info' && !e.voz) { setTimeout(resumen, 1500); return; } // cambios menores: solo actualizan contadores
+  banner(e); if (e.nivel !== 'info') campana();
+  if (e.voz) decir(e.voz, APP[e.app] || 'AVISO', COL[e.nivel], e.nivel);
+  // El mapa vuela al área del ticket
+  const area = e.app === 'tickets' && /·\s*(.+)$/.exec(e.titulo || '');
+  if (area) $('#mapa').contentWindow.postMessage({ tipo: 'enfocar', texto: area[1], etiqueta: (e.titulo.split('·')[0] || '').trim() }, '*');
+  setTimeout(resumen, 1500);
+}
+
+/* ---------- Resumen y pendientes ---------- */
+async function resumen() {
+  try {
+    RES = await (await fetch('/api/resumen')).json();
+    $('#kT').textContent = RES.ticketsPendientes ?? '--'; $('#kC').textContent = RES.creditosPendientes ?? '--'; $('#kR').textContent = RES.red ? RES.red.enLinea : '--';
+    const L = RES.pendientesLista || [], c = RES.creditosPendientes || 0;
+    $('#pLista').innerHTML = L.map(t => `<li style="--c:${t.min >= 30 ? 'var(--urg)' : t.min >= 15 ? 'var(--aviso)' : 'var(--mut)'}"><b>${esc(t.codigo)} · ${esc(t.area || 'Sin área')}</b><time>${t.min} min</time><p>${esc(t.titulo)}</p></li>`).join('');
+    $('#pCred').textContent = c ? `💳 ${c} solicitud${c > 1 ? 'es' : ''} de crédito por evaluar` : '';
+    $('#pend').classList.toggle('oculto', !L.length && !c);
+  } catch {}
+}
+setInterval(resumen, 20000);
+
+/* ---------- Mensaje de tecnología cada 5 minutos (siempre distinto) ---------- */
+let ultSlot = null;
+async function mensaje() {
+  try {
+    const m = await (await fetch('/api/mensaje')).json();
+    if (ultSlot === null) { ultSlot = m.slot; return; } // al abrir, espera el siguiente turno
+    if (m.slot !== ultSlot) { ultSlot = m.slot; if (!RES || RES.enHorario) decir(m.texto, 'DATO TECH', 'var(--neon)'); }
+  } catch {}
+}
+setInterval(mensaje, 30000);
+
+(async () => {
+  try { const c = await (await fetch('/api/tv')).json(); $('#mapa').src = c.mapa; } catch { $('#mapa').src = 'http://' + location.hostname + ':8090/mapa?tv&limpio'; }
+  let ult = 0; try { const L = await (await fetch('/api/eventos?n=1')).json(); ult = L.length ? L[0].id : 0; } catch {}
+  resumen(); mensaje();
+  const es = new EventSource('/api/stream?desde=' + ult);
+  es.addEventListener('aviso', m => aviso(JSON.parse(m.data)));
+  setTimeout(() => location.reload(), 6 * 3600e3); // se refresca sola cada 6 horas
+})();
+</script>
+</body>
+</html>

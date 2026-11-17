@@ -1,0 +1,18 @@
+[Unit]
+Description=Centro de avisos UGEL Chincha (tickets, creditos, red)
+After=network.target postgresql.service ip-libres.service
+
+[Service]
+User=avisos
+WorkingDirectory=/opt/centro-avisos
+ExecStart=/usr/bin/node /opt/centro-avisos/server.js
+Restart=always
+RestartSec=5
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/opt/centro-avisos
+
+[Install]
+WantedBy=multi-user.target

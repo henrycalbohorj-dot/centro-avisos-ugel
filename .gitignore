@@ -1,0 +1,5 @@
+config.json
+estado.json
+voz-cache/
+*.log
+node_modules/
