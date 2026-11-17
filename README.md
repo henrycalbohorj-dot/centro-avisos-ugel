@@ -38,7 +38,5 @@ sudo chown -R avisos: /opt/centro-avisos
 sudo cp centro-avisos.service /etc/systemd/system/ && sudo systemctl enable --now centro-avisos
 ```
 
-Opcional: con una clave de Groq en `config.json` (`groq.key`) los mensajes de tecnología se generan con IA; sin clave usa `mensajes.json`. Más detalles en [LEEME.md](LEEME.md).
-
 ---
-Desarrollado por **Henry Braulio Pachas Dávalos** · Área de Informática, UGEL Chincha.
+Desarrollado por **Ing. Henry Braulio Pachas Dávalos** · Área de Informática, UGEL Chincha.
